@@ -1,6 +1,5 @@
 # ===== DATA (QUAN TRỌNG) =====
-data/
-**/*.csv
+data/raw
 **/*.nc
 **/*.grib
 **/*.idx
