@@ -1,0 +1,14 @@
+# ===== DATA (QUAN TRỌNG) =====
+data/
+**/*.csv
+**/*.nc
+**/*.grib
+**/*.idx
+**/*.data
+
+# ===== CACHE =====
+__pycache__/
+*.pyc
+
+# ===== NOTEBOOK =====
+.ipynb_checkpoints/
