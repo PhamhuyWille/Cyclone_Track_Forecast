@@ -25,27 +25,31 @@ HORIZONS = [6, 12, 24]
 
 # Thư viện 1: Scikit-Learn Gradient Boosting Decision Tree (GBDT)
 GBDT_PARAMS = {
-    'n_estimators': 1000,       # Số lượng cây quyết định
-    'max_depth': 3,             # Độ sâu tối đa của mỗi cây
-    'max_features': 60,         # Lấy ngẫu nhiên 60 biến (trong số 88+ biến) tại mỗi lần phân nhánh
-    'learning_rate': 0.1,       # Tốc độ học
-    'min_samples_split': 2,
-    'min_samples_leaf': 1,
+    'n_estimators': 800,           # Fewer iterations; no early stopping available
+    'max_depth': 2,                # Very shallow - limit memorization of chain noise
+    'max_features': 30,            # Fewer features per split - avoid fitting to chain noise
+    'learning_rate': 0.03,         # Slower learning for stability across links
+    'subsample': 0.6,              # Strong subsample - reduce overfitting to chain features
+    'min_samples_split': 10,       # Stricter split requirement
+    'min_samples_leaf': 8,         # Larger leaves - more robust predictions
     'loss': 'squared_error',
-    'random_state': RANDOM_STATE
+    'random_state': RANDOM_STATE,
 }
 
 # Thư viện 2: XGBoost Regressor
 XGB_PARAMS = {
     'max_depth': 3,
     'learning_rate': 0.01,
-    'n_estimators': 5000,
-    'subsample': 0.8,
+    'n_estimators': 2500,       # 5000 quá rủi ro cho Chains nếu không early stop gắt
+    'subsample': 0.75,
     'colsample_bytree': 0.7,
+    'reg_alpha': 0.5,           # QUAN TRỌNG (L1): Triệt tiêu các nhiễu nhỏ
+    'reg_lambda': 3.0,          # QUAN TRỌNG (L2): Giảm trọng số của các biến dự đoán từ mốc trước
+    'gamma': 0.1,               # Yêu cầu loss giảm tối thiểu mới cho tỉa nhánh
     'objective': 'reg:squarederror',
-    'tree_method': 'hist', # Tăng tốc bằng histogram
+    'tree_method': 'hist',
     'random_state': RANDOM_STATE,
-    'n_jobs': -1           # Dùng toàn bộ nhân CPU
+    'n_jobs': -1
 }
 
 # Thư viện 3: LightGBM Regressor
@@ -55,11 +59,16 @@ LGBM_PARAMS = {
     'verbosity': -1,
     'boosting_type': 'gbdt',
     'random_state': RANDOM_STATE,
-    'learning_rate': 0.02,      # Tốc độ học nhỏ
-    'n_estimators': 3000,       # Số cây lớn để early stopping hoạt động
-    'max_depth': 8,             # Theo cấu hình Jinkai Tan
-    'num_leaves': 7,            # Nhỏ để tránh overfitting
-    'feature_fraction': 0.6,    # Lấy 70% features mỗi lần fit cây
-    'lambda_l1': 0.1,           # Regularization
-    'lambda_l2': 1,
+    'learning_rate': 0.01,         # Giảm từ 0.015
+    'n_estimators': 1500,          # Giảm; early stopping sẽ dừng sớm
+    'max_depth': 3,                # Giảm từ 4
+    'num_leaves': 8,               # Giảm mạnh từ 15, phù hợp max_depth=3
+    'feature_fraction': 0.5,       # Giảm từ 0.6
+    'bagging_fraction': 0.65,      # Giảm từ 0.75
+    'bagging_freq': 1,
+    'lambda_l1': 1.5,              # Tăng từ 0.5
+    'lambda_l2': 8.0,              # Tăng từ 5.0 -> quan trọng để giới hạn propagation
+    'min_child_samples': 30,       # Tăng từ 20 -> lá phải tập trung hơn
 }
+
+
