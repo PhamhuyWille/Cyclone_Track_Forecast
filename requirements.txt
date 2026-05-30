@@ -1,0 +1,8 @@
+numpy==2.4.6
+pandas==3.0.3
+xarray==2026.4.0
+Python >= 3.8
+scikit-learn >= 1.0.0
+xgboost >= 1.5.0
+lightgbm >= 3.3.0
+eccodes >= 2.20.0

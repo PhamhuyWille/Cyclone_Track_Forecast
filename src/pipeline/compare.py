@@ -53,6 +53,16 @@ def run_experiment_matrix():
      y_test_lat, y_test_lon, test_df) = load_and_split_data()
     
     report_rows = []
+    trajectory_dfs = []
+    storm_identities = {
+        'SID': test_df['SID'].values,
+        'YEAR': test_df['YEAR'].values,
+        'MONTH': test_df['MONTH'].values,
+        'DAY': test_df['DAY'].values,
+        'HOUR': test_df['HOUR'].values,
+        'BASE_LAT': test_df['LAT'].values,
+        'BASE_LON': test_df['LON'].values
+    }
     
     print("\n==================== THÍ NGHIỆM 0: CLIPER BASELINE ====================")
     cliper_runner = CLIPERForecastingStrategy()
@@ -88,6 +98,15 @@ def run_experiment_matrix():
             'Directional_Stability': directional_stability,
             'Moving_Velocity_Sensitivity': velocity_sensitivity
         })
+
+        clip_df = pd.DataFrame(storm_identities)
+        clip_df['Horizon'] = f"+{h}h"
+        clip_df['Strategy'] = "CLIPER_BASELINE"
+        clip_df['TRUE_TARGET_LAT'] = true_lat
+        clip_df['TRUE_TARGET_LON'] = true_lon
+        clip_df['PRED_TARGET_LAT'] = pred_clip_lat_geo
+        clip_df['PRED_TARGET_LON'] = pred_clip_lon_geo
+        trajectory_dfs.append(clip_df)
     
 
     models = ['lightgbm', 'xgboost', 'gdbt'] 
@@ -129,6 +148,15 @@ def run_experiment_matrix():
                 'Moving_Velocity_Sensitivity': velocity_sensitivity
             })
 
+            ind_df = pd.DataFrame(storm_identities)
+            ind_df['Horizon'] = f"+{h}h"
+            ind_df['Strategy'] = f"{model_name.upper()}_NORMAL"
+            ind_df['TRUE_TARGET_LAT'] = true_lat
+            ind_df['TRUE_TARGET_LON'] = true_lon
+            ind_df['PRED_TARGET_LAT'] = pred_ind_lat_geo
+            ind_df['PRED_TARGET_LON'] = pred_ind_lon_geo
+            trajectory_dfs.append(ind_df)
+
         
         # 2. Huấn luyện & Dự báo kỹ thuật Regressor Chain
         chain_orderings = ['horizon_first', 'coordinate_first_lat', 'strict_interleaved']
@@ -167,13 +195,28 @@ def run_experiment_matrix():
                     'Directional_Stability': ds_chain,
                     'Moving_Velocity_Sensitivity': vs_chain
                 })
+
+                chain_df = pd.DataFrame(storm_identities)
+                chain_df['Horizon'] = f"+{h}h"
+                chain_df['Strategy'] = f"{model_name.upper()}_CHAIN_{order.upper()}"
+                chain_df['TRUE_TARGET_LAT'] = true_lat
+                chain_df['TRUE_TARGET_LON'] = true_lon
+                chain_df['PRED_TARGET_LAT'] = pred_chain_lat_geo
+                chain_df['PRED_TARGET_LON'] = pred_chain_lon_geo
+                trajectory_dfs.append(chain_df)
         
     # Xuất file báo cáo kết quả chi tiết
     df_report = pd.DataFrame(report_rows)
     os.makedirs(config.RESULTS_DIR, exist_ok=True)
-    report_path = os.path.join(config.RESULTS_DIR, "final_comparison_report_ver02.csv")
+
+    report_path = os.path.join(config.RESULTS_DIR, "final_comparison_report_ver03.csv")
     df_report.to_csv(report_path, index=False)
     print(f"\n[THÀNH CÔNG] Đã lưu bảng thống kê đối chiếu cấu trúc đồ án tại: {report_path}")
+
+    df_trajectories = pd.concat(trajectory_dfs, ignore_index=True)
+    traj_path = os.path.join(config.RESULTS_DIR, "detailed_trajectories_predictions.csv")
+    df_trajectories.to_csv(traj_path, index=False)
+    print(f"[THÀNH CÔNG] Đã xuất file tọa độ nền vẽ hình minh họa đồ án tốt nghiệp tại: {traj_path}")
 
 if __name__ == "__main__":
     run_experiment_matrix()
