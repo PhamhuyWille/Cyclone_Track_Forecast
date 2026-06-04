@@ -23,6 +23,13 @@ let currentStormTimes = [];
 // Helper function for delays (animations)
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
+const stormIcon = L.divIcon({
+  html: '<div class="storm-spinner" style="font-size: 28px; text-shadow: 0 0 15px #00d2ff;">🌀</div>',
+  className: 'custom-storm-icon',
+  iconSize: [30, 30],
+  iconAnchor: [15, 15]
+});
+
 // Initialize Map
 function initMap() {
   map = L.map('map', {
@@ -124,13 +131,11 @@ async function loadStormTimes(sid) {
             className: 'animated-path'
         }).addTo(pastLayer);
         
-        // Add start marker
-        L.circleMarker([point.lat, point.lon], {
-          color: '#ffffff',
-          fillColor: '#ffffff',
-          fillOpacity: 1,
-          radius: 8
-        }).addTo(pastLayer).bindPopup(`<b>${point.time_str}</b><br/>Tâm bão hiện tại (T0)`).openPopup();
+        // Add start marker (Spinning Storm)
+        L.marker([point.lat, point.lon], {icon: stormIcon})
+          .addTo(pastLayer)
+          .bindPopup(`<b>${point.time_str}</b><br/>Tâm bão hiện tại (T0)`)
+          .openPopup();
         
         // Fit map bounds to past trajectory
         if (pastPoints.length > 1) {
@@ -207,6 +212,21 @@ async function drawPredictionsAnimated(data) {
       color: '#ff416c', fillColor: '#ff416c', fillOpacity: 0.8, radius: 6,
       className: 'marker-pop'
     }).addTo(markersLayer).bindPopup(`Dự đoán ${h}`);
+    
+    // Draw Uncertainty Circle (Cone of Uncertainty)
+    let errorRadius = 35000; // 6h default (~35km)
+    if (h === '12h') errorRadius = 61000; // ~61km
+    if (h === '24h') errorRadius = 145000; // ~145km
+    
+    L.circle([predLat, predLon], {
+      color: '#ff416c',
+      fillColor: '#ff416c',
+      fillOpacity: 0.15,
+      weight: 1.5,
+      dashArray: '4, 4',
+      radius: errorRadius,
+      className: 'marker-pop' // Use same animation to pop in
+    }).addTo(markersLayer);
     
     // Draw lines up to this point
     linesLayer.clearLayers();

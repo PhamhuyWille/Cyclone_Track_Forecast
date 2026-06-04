@@ -255,3 +255,23 @@ body {
     stroke-dashoffset: 0;
   }
 }
+
+.custom-storm-icon {
+  background: transparent;
+  border: none;
+}
+
+.storm-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  animation: spinStorm 1.5s linear infinite;
+}
+
+@keyframes spinStorm {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(-180deg) scale(1.1); }
+  100% { transform: rotate(-360deg) scale(1); }
+}
