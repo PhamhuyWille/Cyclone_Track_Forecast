@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cyclone Track Predictor</title>
+  </head>
+  <body>
+    <div class="app-container">
+      <div class="sidebar glass-panel">
+        <h1 class="gradient-text">Cyclone AI</h1>
+        <p class="subtitle">Mô hình Dự báo Quỹ đạo Bão (Regressor Chain)</p>
+        
+        <div class="control-group">
+          <label for="storm-select">Chọn Cơn Bão (Tập Test):</label>
+          <select id="storm-select" class="styled-select">
+            <option value="" disabled selected>-- Đang tải danh sách bão --</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="time-select">Chọn Thời Điểm Khởi Điểm:</label>
+          <select id="time-select" class="styled-select" disabled>
+            <option value="" disabled selected>-- Chọn bão trước --</option>
+          </select>
+        </div>
+
+        <button id="predict-btn" class="glow-button" disabled>Dự đoán Quỹ đạo</button>
+        
+        <div class="legend">
+          <div class="legend-item">
+            <span class="legend-color true-color"></span> Thực tế
+          </div>
+          <div class="legend-item">
+            <span class="legend-color pred-color"></span> Dự báo (LightGBM)
+          </div>
+        </div>
+
+        <div id="stats-panel" class="stats-panel hidden">
+          <h3>Thống kê Sai số (DPE)</h3>
+          <div class="stat-row">
+            <span>+6h:</span>
+            <span id="stat-6h" class="stat-value">-- km</span>
+          </div>
+          <div class="stat-row">
+            <span>+12h:</span>
+            <span id="stat-12h" class="stat-value">-- km</span>
+          </div>
+          <div class="stat-row">
+            <span>+24h:</span>
+            <span id="stat-24h" class="stat-value">-- km</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="main-content">
+        <div id="map" class="map-container"></div>
+      </div>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
