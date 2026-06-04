@@ -15,33 +15,33 @@ def run_full_pipeline() -> None:
     print("🌧️  CYCLONE TRACK FORECAST SYSTEM")
     print("=" * 80)
     
-    # Step 1: Process IBTRACS data
-    print("\n[STEP 1/7] 🛰️  IBTRACS Data Preprocessing...")
+    '''# Step 1: Process IBTRACS data
+    print("\n[STEP 1/6] 🛰️  IBTRACS Data Preprocessing...")
     preprocess_ibtracs_data()
     print("✅ IBTRACS data preprocessing complete!")
     
     # Step 2: Process ENSO data
-    print("\n[STEP 2/7] 🔽 Processing ENSO data...")
+    print("\n[STEP 2/6] 🔽 Processing ENSO data...")
     process_enso_data()
     print("✅ ENSO data processing complete!")
     
     # Step 3: Process single levels
-    print("\n[STEP 3/7] 🔺 Processing ERA5 single-level data...")
+    print("\n[STEP 3/6] 🔺 Processing ERA5 single-level data...")
     ERA5_extracting()
-    print("✅ Single-level processing complete!")
+    print("✅ Single-level processing complete!")'''
 
     # Step 4: Feature engineering
-    print("\n[STEP 4/7] 🔺 Feature Engineering...")
+    print("\n[STEP 4/6] 🔺 Feature Engineering...")
     feature_engineering()
     print("✅ Feature engineering complete!")
 
     # Step 5: Target splitting
-    print("\n[STEP 5/7] 🔀 Target Splitting...")
+    print("\n[STEP 5/6] 🔀 Target Splitting...")
     target_split()
     print("✅ Target splitting complete!")
     
     # Step 6: Pipeline running
-    print('\n [STEP 6/7] Pipeline running')
+    print('\n [STEP 6/6] Pipeline running')
     run_experiment_matrix()
     print('Completed!')
 

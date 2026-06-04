@@ -17,8 +17,8 @@ RANDOM_STATE = 42
 MERGE_LABELS = ['SID', 'YEAR', 'MONTH', 'DAY', 'HOUR', 'LAT', 'LON']
 
 DROPS_COLUMNS = ['SID', 'YEAR', 'MONTH', 'DAY', 'HOUR'] + [
-                col for col in [f'DELTA_LAT_{i}h' for i in [6, 12, 18, 24]]] + [
-                col for col in [f'DELTA_LON_{i}h' for i in [6, 12, 18, 24]]]
+                col for col in [f'DELTA_LAT_{i}h' for i in [6, 12, 24]]] + [
+                col for col in [f'DELTA_LON_{i}h' for i in [6, 12, 24]]]
 
 
 HORIZONS = [6, 12, 24]

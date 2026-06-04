@@ -126,8 +126,7 @@ Cyclone_Track_Forecast/
         ├── compare.py               # Chạy so sánh thử nghiệm
         ├── normal.py                # Chiến lược dự báo độc lập
         ├── regressor_chain.py       # Chiến lược chuỗi hồi quy
-        ├── cliper.py                # Phương pháp cơ sở CLIPER
-        └── RC.py                    # Tiện ích quy trình bổ sung
+        └── cliper.py                # Phương pháp cơ sở CLIPER
 ```
 
 ---

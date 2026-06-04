@@ -34,7 +34,7 @@ def target_split():
     df = split_12h(df)
     df = split_24h(df)
     target_cols = FEATURES + ['DELTA_LAT_6h', 'DELTA_LON_6h', 'DELTA_LAT_12h', 'DELTA_LON_12h', 
-                   'DELTA_LAT_18h', 'DELTA_LON_18h', 'DELTA_LAT_24h', 'DELTA_LON_24h']
+                              'DELTA_LAT_24h', 'DELTA_LON_24h']
     features_cols = [col for col in df.columns if col not in target_cols]
     target_df = df[target_cols]
     features_df = df[FEATURES + features_cols]
